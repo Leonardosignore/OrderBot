@@ -168,7 +168,7 @@ async def ordina(message: Message):
 async def lista_ordini(message: Message):
     logger.info("Handler /ordini ")
     if message.from_user.id != VENDITORE_ID:
-        logger.info("non sono il venditore")
+        logger.info("non sono il venditore", message.from_user.id, VENDITORE_ID)
         return
 
     ordini = get_ordini_pending()
