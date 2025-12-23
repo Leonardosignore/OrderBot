@@ -21,7 +21,7 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("leo")
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-VENDITORE_ID = os.getenv("VENDITORE_ID")
+VENDITORE_ID = int(os.getenv("VENDITORE_ID"))
 
 ORDINI_IN_CORSO = {}
 CATEGORIE = ["40K", "60K"]
