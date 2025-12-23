@@ -13,9 +13,13 @@ from database import conferma_ordine, scala_quantita
 from database import annulla_ordine
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+import logging
+
 
 load_dotenv()
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("leo")
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 VENDITORE_ID = os.getenv("VENDITORE_ID")
 
@@ -69,6 +73,7 @@ async def start(message: Message):
 
 @dp.message(Command("prodotti"))
 async def lista_prodotti(message: Message):
+    logger.info("Handler /prodotti chiamato")
     await invia_lista_prodotti(message)
 
 @dp.callback_query(lambda c: c.data in ["ordina", "prodotti"])
@@ -90,6 +95,7 @@ async def scegli_categoria(callback: CallbackQuery):
 
 @dp.callback_query(lambda c: c.data.startswith("categoria:"))
 async def mostra_prodotti_categoria(callback: CallbackQuery):
+    logger.info("Handler /categoria ")
     await callback.answer()
 
     categoria = callback.data.split(":")[1]
@@ -118,6 +124,7 @@ async def mostra_prodotti_categoria(callback: CallbackQuery):
 
 @dp.callback_query(lambda c: c.data.startswith("ordina_prodotto:"))
 async def scegli_prodotto(callback: CallbackQuery):
+    logger.info("Handler /ordina_prodotto: ")
     await callback.answer()
 
     nome_prodotto = callback.data.split(":")[1]
@@ -135,6 +142,7 @@ async def scegli_prodotto(callback: CallbackQuery):
 
 @dp.message(Command("ordina"))
 async def ordina(message: Message):
+    logger.info("Handler /ordina chiamato")
     prodotti = get_prodotti()
 
     if not prodotti:
@@ -158,6 +166,7 @@ async def ordina(message: Message):
 
 @dp.message(Command("ordini"))
 async def lista_ordini(message: Message):
+    logger.info("Handler /ordini ")
     if message.from_user.id != VENDITORE_ID:
         return
 
