@@ -128,10 +128,10 @@ def scala_quantita(prodotto, quantita):
 
 def seed_prodotti():
     prodotti = [
-        ("mele", 50, "40K", "15€"),
-        ("banane", 30, "40K", "15€"),
-        ("arance", 20, "40K", "15€"),
-        ("pere", 15, "40K", "15€")
+        ("mele", 50, "40K", "15"),
+        ("banane", 30, "40K", "15"),
+        ("arance", 20, "60K", "20"),
+        ("pere", 15, "60K", "20")
     ]
 
     conn = get_connection()

@@ -12,18 +12,20 @@ from database import get_ordini_pending
 from database import conferma_ordine, scala_quantita
 from database import annulla_ordine
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 VENDITORE_ID = 912230623
 ORDINI_IN_CORSO = {}
+CATEGORIE = ["40K", "60K"]
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
 async def invia_lista_prodotti(target):
-    prodotti = get_prodotti("40K")
+    prodotti = get_prodotti()
 
     if not prodotti:
         await target.answer("❌ Nessun prodotto disponibile.")
@@ -68,35 +70,50 @@ async def start(message: Message):
 async def lista_prodotti(message: Message):
     await invia_lista_prodotti(message)
 
-@dp.callback_query(lambda c: c.data == "prodotti")
-async def callback_prodotti(callback: CallbackQuery):
-    await callback.answer()  # chiude l'animazione del bottone
-    await invia_lista_prodotti(callback.message)
-
-@dp.callback_query(lambda c: c.data == "ordina")
-async def callback_ordina (callback: CallbackQuery):
+@dp.callback_query(lambda c: c.data in ["ordina", "prodotti"])
+async def scegli_categoria(callback: CallbackQuery):
     await callback.answer()
-    
-    prodotti = get_prodotti()
+
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text=cat, callback_data=f"categoria:{cat}")]
+            for cat in CATEGORIE
+        ]
+    )
+
+    action = "ordinare" if callback.data == "ordina" else "consultare"
+    await callback.message.answer(
+        f"Seleziona la categoria di prodotti da {action}:",
+        reply_markup=keyboard
+    )
+
+@dp.callback_query(lambda c: c.data.startswith("categoria:"))
+async def mostra_prodotti_categoria(callback: CallbackQuery):
+    await callback.answer()
+
+    categoria = callback.data.split(":")[1]
+
+    ORDINI_IN_CORSO[callback.from_user.id] = {
+        "categoria": categoria
+    }
+
+    prodotti = get_prodotti(categoria)  # assume get_prodotti accetta categoria come argomento
 
     if not prodotti:
-        await callback.message.answer("❌ Nessun prodotto disponibile.")
+        await callback.message.answer("❌ Nessun prodotto disponibile in questa categoria.")
         return
 
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(
-                text=f"{nome} ({quantita})",
-                callback_data=f"ordina_prodotto:{nome}"
-            )]
-            for nome, quantita in prodotti
+            [InlineKeyboardButton(text=f"{nome} ({quantita})", callback_data=f"ordina_prodotto:{nome}")]
+            for nome, quantita, *_ in prodotti
         ]
     )
 
     await callback.message.answer(
-        "🛒 Scegli il prodotto da ordinare:",
+        f"Prodotti disponibili nella categoria {categoria}:",
         reply_markup=keyboard
-    ) 
+    )
 
 @dp.callback_query(lambda c: c.data.startswith("ordina_prodotto:"))
 async def scegli_prodotto(callback: CallbackQuery):
@@ -104,10 +121,10 @@ async def scegli_prodotto(callback: CallbackQuery):
 
     nome_prodotto = callback.data.split(":")[1]
 
-    ORDINI_IN_CORSO[callback.from_user.id] = {
+    ORDINI_IN_CORSO[callback.from_user.id].update({
         "prodotto": nome_prodotto,
         "fase": "quantita"
-    }
+    })
 
     await callback.message.answer(
         f"📦 Hai scelto: *{nome_prodotto}*\n\n"
@@ -231,7 +248,8 @@ async def ricevi_quantita(message: Message):
 
     nome_prodotto = stato["prodotto"]
 
-    products = dict(get_prodotti())
+    categoria = stato["categoria"]
+    products = {nome: quantita for nome, quantita, *_ in get_prodotti(categoria)}
     if quantita > products.get(nome_prodotto, 0):
         await message.answer("❌ Quantità non disponibile.")
         return
