@@ -1,10 +1,10 @@
-# fly.toml app configuration file generated for telegram-bot-wispy-forest-8447 on 2025-12-23T19:58:23+01:00
+# fly.toml app configuration file generated for telegram-bot-wispy-forest-8447 on 2025-12-23T19:29:27Z
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
 app = 'telegram-bot-wispy-forest-8447'
-primary_region = 'lhr'
+primary_region = 'iad'
 
 [build]
 
@@ -18,5 +18,6 @@ primary_region = 'lhr'
 
 [[vm]]
   memory = '1gb'
+  cpu_kind = 'shared'
   cpus = 1
   memory_mb = 1024
