@@ -17,7 +17,8 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-VENDITORE_ID = 912230623
+VENDITORE_ID = os.getenv("VENDITORE_ID")
+
 ORDINI_IN_CORSO = {}
 CATEGORIE = ["40K", "60K"]
 
