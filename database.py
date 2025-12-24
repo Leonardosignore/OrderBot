@@ -38,15 +38,21 @@ def init_db():
     conn.close()
 
 
-def get_prodotti(categoria):
+def get_prodotti(categoria=None):
     conn = get_connection()
     cur = conn.cursor()
 
-    cur.execute("SELECT nome, quantita, categoria, prezzo FROM prodotti WHERE categoria = ? AND quantita > 0", (categoria,))
-    rows = cur.fetchall()
+    if categoria is None:
+        cur.execute("SELECT nome, quantita FROM prodotti")
+    else:
+        cur.execute(
+            "SELECT nome, quantita FROM prodotti WHERE categoria = ?",
+            (categoria,)
+        )
 
+    result = cur.fetchall()
     conn.close()
-    return rows
+    return result
 
 def get_categorie ():
     conn = get_connection()
