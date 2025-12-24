@@ -56,7 +56,7 @@ def get_categorie ():
     result = cur.fetchall()
     
     conn.close()
-    return result is not None
+    return result
 
 def prodotto_esiste(nome):
     conn = get_connection()
