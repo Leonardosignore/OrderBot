@@ -1,6 +1,7 @@
 import sqlite3
 
-DB_NAME = "shop.db"
+# In database.py
+DB_NAME = "/data/shop.db" # Percorso assoluto nel volume
 
 def get_connection():
     return sqlite3.connect(DB_NAME)
