@@ -43,10 +43,10 @@ def get_prodotti(categoria=None):
     cur = conn.cursor()
 
     if categoria is None:
-        cur.execute("SELECT nome, quantita FROM prodotti")
+        cur.execute("SELECT nome, quantita, categoria, prezzo FROM prodotti")
     else:
         cur.execute(
-            "SELECT nome, quantita FROM prodotti WHERE categoria = ?",
+            "SELECT nome, quantita, categoria, prezzo FROM prodotti WHERE categoria = ?",
             (categoria,)
         )
 
