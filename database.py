@@ -42,7 +42,7 @@ def get_prodotti(categoria):
     conn = get_connection()
     cur = conn.cursor()
 
-    cur.execute("SELECT nome, quantita, categoria, prezzo FROM prodotti WHERE categoria = ?", (categoria,))
+    cur.execute("SELECT nome, quantita, categoria, prezzo FROM prodotti WHERE categoria = ? AND quantita > 0", (categoria,))
     rows = cur.fetchall()
 
     conn.close()
