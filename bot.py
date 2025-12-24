@@ -2,7 +2,7 @@ import asyncio
 import os
 from aiogram.types import CallbackQuery
 from dotenv import load_dotenv
-from database import init_db, seed_prodotti, get_prodotti
+from database import get_categorie, init_db, seed_prodotti, get_prodotti
 from aiogram import Bot, Dispatcher
 from aiogram.types import Message
 from aiogram.filters import CommandStart
@@ -79,6 +79,8 @@ async def lista_prodotti(message: Message):
 @dp.callback_query(lambda c: c.data in ["ordina", "prodotti"])
 async def scegli_categoria(callback: CallbackQuery):
     await callback.answer()
+    
+    CATEGORIE = get_categorie()
 
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[

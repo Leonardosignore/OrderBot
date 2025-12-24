@@ -48,6 +48,15 @@ def get_prodotti(categoria):
     conn.close()
     return rows
 
+def get_categorie ():
+    conn = get_connection()
+    cur = conn.cursor()
+    
+    cur.execute("SELECT DISTINCT categoria FROM prodotti")
+    result = cur.fetchall()
+    
+    conn.close()
+    return result is not None
 
 def prodotto_esiste(nome):
     conn = get_connection()
