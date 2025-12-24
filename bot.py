@@ -81,6 +81,8 @@ async def scegli_categoria(callback: CallbackQuery):
     await callback.answer()
     
     CATEGORIE = get_categorie()
+    
+    logger.info(CATEGORIE)
 
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
