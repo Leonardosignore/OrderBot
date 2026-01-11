@@ -37,6 +37,16 @@ def init_db():
     conn.commit()
     conn.close()
 
+def get_users ():
+    conn = get_connection()
+    cur = conn.cursor()
+    
+    cur.execute("SELECT DISTINCT nome_cliente FROM ordini")
+    result = [row[0] for row in cur.fetchall()]
+    
+    conn.close()
+    return result
+
 
 def get_prodotti(categoria=None):
     conn = get_connection()

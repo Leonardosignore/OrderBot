@@ -2,7 +2,7 @@ import asyncio
 import os
 from aiogram.types import CallbackQuery
 from dotenv import load_dotenv
-from database import get_categorie, init_db, seed_prodotti, get_prodotti
+from database import get_categorie, get_users, init_db, seed_prodotti, get_prodotti
 from aiogram import Bot, Dispatcher
 from aiogram.types import Message
 from aiogram.filters import CommandStart
@@ -47,8 +47,8 @@ async def invia_lista_prodotti(target):
         categorie[categoria]["prodotti"].append((nome, quantita))
 
     testo = (
-        "🏪 *PuffH24 – Store Ufficiale*\n"
-        "Qui trovi tutti i prodotti attualmente disponibili nel nostro shop:\n"
+        "🏪 *PuffH24 – Store Ufficiale*\n\n"
+        "Qui trovi tutti i prodotti attualmente disponibili nel nostro shop:\n\n"
         "✅ Disponibile | ❌ Esaurito\n\n"
     )
 
@@ -58,7 +58,7 @@ async def invia_lista_prodotti(target):
         )
         for nome, quantita in info["prodotti"]:
             stato = "✅" if quantita > 0 else "❌"
-            testo += f"   • *{nome}* ({quantita} pz) — {stato}\n"
+            testo += f"   • *{nome}* {quantita}pz {stato}\n"
         testo += "\n"
 
     testo += (
@@ -106,6 +106,16 @@ async def start(message: Message):
         parse_mode="Markdown",                     
         reply_markup=keyboard
     )
+    
+@dp.message(Command("users"))
+async def lista_utenti(message: Message):
+    if message.from_user.id != VENDITORE_ID:
+        return
+    utenti = get_users()
+    if not utenti:
+        await message.answer("❌ Nessun utente registrato.")
+        return
+    await message.answer(f"👥 Utenti registrati:\n\n{chr(10).join(utenti)}")
 
 @dp.message(Command("prodotti"))
 async def lista_prodotti(message: Message):
@@ -129,7 +139,7 @@ async def scegli_categoria(callback: CallbackQuery):
 
     action = "ordinare" if callback.data == "ordina" else "consultare"
     await callback.message.answer(
-        f"Seleziona la categoria di prodotti da {action}:",
+        f"Seleziona la categoria di prodotti da\nLe *categorie* indicano la quantità di *tiri* delle puff. {action}:",
         reply_markup=keyboard
     )
 
