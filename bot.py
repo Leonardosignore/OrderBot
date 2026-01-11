@@ -108,7 +108,7 @@ async def scegli_categoria(callback: CallbackQuery):
 
 @dp.callback_query(lambda c: c.data in ["prodotti"])
 async def get_all_prodotti_(callback: CallbackQuery):
-    await invia_lista_prodotti(callback)
+    await invia_lista_prodotti(callback.message)
 
 @dp.callback_query(lambda c: c.data.startswith("categoria:"))
 async def mostra_prodotti_categoria(callback: CallbackQuery):
