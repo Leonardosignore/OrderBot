@@ -85,7 +85,7 @@ async def lista_prodotti(message: Message):
     logger.info("Handler /prodotti chiamato")
     await invia_lista_prodotti(message)
 
-@dp.callback_query(lambda c: c.data in ["ordina", "prodotti"])
+@dp.callback_query(lambda c: c.data in ["ordina"])
 async def scegli_categoria(callback: CallbackQuery):
     await callback.answer()
     
@@ -105,6 +105,10 @@ async def scegli_categoria(callback: CallbackQuery):
         f"Seleziona la categoria di prodotti da {action}:",
         reply_markup=keyboard
     )
+
+@dp.callback_query(lambda c: c.data in ["prodotti"])
+async def scegli_categoria(callback: CallbackQuery):
+    await invia_lista_prodotti(callback)
 
 @dp.callback_query(lambda c: c.data.startswith("categoria:"))
 async def mostra_prodotti_categoria(callback: CallbackQuery):
