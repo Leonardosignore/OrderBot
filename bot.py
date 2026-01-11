@@ -47,9 +47,9 @@ async def invia_lista_prodotti(target):
         categorie[categoria]["prodotti"].append((nome, quantita))
 
     testo = (
-        "🏪 *BotPuff – Store Ufficiale*\n"
-        "_Magazzino aggiornato in tempo reale_\n\n"
-        "Qui trovi tutti i prodotti attualmente disponibili nel nostro shop:\n\n"
+        "🏪 *PuffH24 – Store Ufficiale*\n"
+        "Qui trovi tutti i prodotti attualmente disponibili nel nostro shop:\n"
+        "✅ Disponibile | ❌ Esaurito\n\n"
     )
 
     for categoria, info in categorie.items():
@@ -57,8 +57,8 @@ async def invia_lista_prodotti(target):
             f"🔹 *{categoria}* — 💶 *{info['prezzo']}€*\n"
         )
         for nome, quantita in info["prodotti"]:
-            stato = "✅ Disponibile" if quantita > 0 else "❌ Esaurito"
-            testo += f"   • {nome} ({quantita}) — {stato}\n"
+            stato = "✅" if quantita > 0 else "❌"
+            testo += f"   • *{nome}* ({quantita} pz) — {stato}\n"
         testo += "\n"
 
     testo += (
@@ -350,3 +350,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+    
