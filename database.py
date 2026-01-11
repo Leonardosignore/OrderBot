@@ -105,12 +105,12 @@ def get_ordini (user_id=None):
 
     if user_id is None:
         cur.execute("""
-            SELECT id, user_id, nome_cliente, prodotto, quantita, stato
+            SELECT id, user_id, nome_cliente, prodotto, quantita, stato, timestamp
             FROM ordini
             """)
     else:
         cur.execute("""
-            SELECT id, user_id, nome_cliente, prodotto, quantita, stato
+            SELECT id, user_id, nome_cliente, prodotto, quantita, stato, timestamp
             FROM ordini
             WHERE user_id = ?
             """, (user_id,))
