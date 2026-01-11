@@ -2,7 +2,7 @@ import asyncio
 import os
 from aiogram.types import CallbackQuery
 from dotenv import load_dotenv
-from database import get_categorie, get_users, init_db, seed_prodotti, get_prodotti
+from database import get_categorie, get_ordini, get_users, init_db, seed_prodotti, get_prodotti
 from aiogram import Bot, Dispatcher
 from aiogram.types import Message
 from aiogram.filters import CommandStart
@@ -86,10 +86,13 @@ async def start(message: Message):
         
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [
-            InlineKeyboardButton(text="📦 Consulta prodotti", callback_data="prodotti")
+            InlineKeyboardButton(text="🛍️ Consulta lo shop", callback_data="prodotti")
         ],
         [
             InlineKeyboardButton(text="🛒 Effettua un ordine", callback_data="ordina")
+        ],
+        [
+            InlineKeyboardButton(text="📦 Visualizza ordini", callback_data="ordini")
         ]
     ])
     photo = FSInputFile(START_IMAGE_PATH)
@@ -106,6 +109,20 @@ async def start(message: Message):
         parse_mode="Markdown",                     
         reply_markup=keyboard
     )
+    
+    
+@dp.message(Command("help"))
+async def help_command(message: Message):
+    await message.answer(
+        "Benvenuto venditore!\n\n"
+        "🤖 *Comandi disponibili:*\n\n"
+        "/start - Avvia il bot e visualizza il menu principale.\n"
+        "/prodotti - Mostra la lista dei prodotti disponibili con le loro quantità.\n"
+        "/ordina - Inizia il processo di ordinazione di un prodotto.\n"
+        "/storico - Visualizza lo storico dei tuoi ordini.\n"
+        "/id - Mostra il tuo ID utente Telegram.\n\n"
+        "Se hai bisogno di assistenza, non esitare a contattarmi!"
+    , parse_mode="Markdown")
     
 @dp.message(Command("users"))
 async def lista_utenti(message: Message):
@@ -147,6 +164,55 @@ async def scegli_categoria(callback: CallbackQuery):
 async def get_all_prodotti_(callback: CallbackQuery):
     await callback.answer()
     await invia_lista_prodotti(callback.message)
+
+@dp.callback_query(lambda c: c.data in ["ordini"])
+async def lista_ordini_callback(callback: CallbackQuery):
+    logger.info("Handler /ordini callback ")
+    await callback.answer()
+    if callback.from_user.id != VENDITORE_ID:
+        logger.info("non sono il venditore", callback.from_user.id, VENDITORE_ID)
+        return
+
+    ordini = get_ordini(callback.from_user.id)
+
+    if not ordini:
+        await callback.message.answer("📭 Nessun ordine in attesa.")
+        return
+
+    testo = "📋 Ordini Effettuati:\n\n"
+    for oid, user_id, nome_cliente, prodotto, quantita, stato, timestamp in ordini:
+        testo += (
+            f"Prodotto: {prodotto}\n"
+            f"Quantità: {quantita}\n"
+            f"Stato: {stato}\n"
+            f"Data: {timestamp}\n\n"
+        )
+
+    await callback.message.answer(testo)
+    
+@dp.message(Command("storico"))
+async def storico_ordini(message: Message):
+    logger.info("Handler /storico ")
+    if message.from_user.id == VENDITORE_ID:
+        logger.info("non sono un cliente", message.from_user.id, VENDITORE_ID)
+        return
+    ordini = get_ordini()
+
+    if not ordini:
+        await message.answer("📭 Nessun ordine trovato.")
+        return
+
+    testo = "📋 Storico ordini:\n\n"
+    for oid, user_id, nome_cliente, prodotto, quantita, stato, timestamp in ordini:
+        testo += (
+            f"ID: {oid}\n"
+            f"Prodotto: {prodotto}\n"
+            f"Quantità: {quantita}\n"
+            f"Stato: {stato}\n"
+            f"Data: {timestamp}\n\n"
+        )
+
+    await message.answer(testo)
 
 @dp.callback_query(lambda c: c.data.startswith("categoria:"))
 async def mostra_prodotti_categoria(callback: CallbackQuery):

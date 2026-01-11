@@ -99,6 +99,25 @@ def crea_ordine(user_id, nomecliente, prodotto, quantita):
     return ordine_id
 
 
+def get_ordini (user_id=None):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    if user_id is None:
+        cur.execute("""
+            SELECT id, user_id, nome_cliente, prodotto, quantita, stato
+            FROM ordini
+            """)
+    else:
+        cur.execute("""
+            SELECT id, user_id, nome_cliente, prodotto, quantita, stato
+            FROM ordini
+            WHERE user_id = ?
+            """, (user_id,))
+    rows = cur.fetchall()
+    conn.close()
+    return rows
+
 def get_ordini_pending():
     conn = get_connection()
     cur = conn.cursor()
