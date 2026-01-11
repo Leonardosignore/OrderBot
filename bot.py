@@ -170,19 +170,18 @@ async def lista_ordini_callback(callback: CallbackQuery):
     logger.info("Handler /ordini callback ")
     await callback.answer()
 
-    ordini = get_ordini(callback.from_user.id)
+    ordini = get_ordini(callback.message.from_user.id)
 
     if not ordini:
         await callback.message.answer("📭 Nessun ordine in attesa.")
         return
 
     testo = "📋 Ordini Effettuati:\n\n"
-    for oid, user_id, nome_cliente, prodotto, quantita, stato, timestamp in ordini:
+    for oid, user_id, nome_cliente, prodotto, quantita, stato in ordini:
         testo += (
             f"Prodotto: {prodotto}\n"
             f"Quantità: {quantita}\n"
-            f"Stato: {stato}\n"
-            f"Data: {timestamp}\n\n"
+            f"Stato: {stato}\n\n"
         )
 
     await callback.message.answer(testo)

@@ -89,8 +89,8 @@ def crea_ordine(user_id, nomecliente, prodotto, quantita):
     cur = conn.cursor()
 
     cur.execute("""
-        INSERT INTO ordini (user_id, nome_cliente, prodotto, quantita, stato)
-        VALUES (?, ?, ?, ?, 'pending')
+        INSERT INTO ordini (user_id, nome_cliente, prodotto, quantita, stato, timestamp)
+        VALUES (?, ?, ?, ?, 'pending', CURRENT_TIMESTAMP)
     """, (user_id, nomecliente, prodotto, quantita))
 
     ordine_id = cur.lastrowid
