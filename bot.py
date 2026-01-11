@@ -33,14 +33,41 @@ async def invia_lista_prodotti(target):
     prodotti = get_prodotti()
 
     if not prodotti:
-        await target.answer("❌ Nessun prodotto disponibile.")
+        await target.answer("❌ Al momento il nostro store è temporaneamente senza prodotti disponibili.")
         return
 
-    testo = "📦 Prodotti disponibili:\n\n"
+    # Raggruppa prodotti per categoria
+    categorie = {}
     for nome, quantita, categoria, prezzo in prodotti:
-        testo += f"- {nome} {categoria}: {prezzo}€\n"
+        if categoria not in categorie:
+            categorie[categoria] = {
+                "prezzo": prezzo,
+                "prodotti": []
+            }
+        categorie[categoria]["prodotti"].append((nome, quantita))
 
-    await target.answer(testo)
+    testo = (
+        "🏪 *BotPuff – Store Ufficiale*\n"
+        "_Magazzino aggiornato in tempo reale_\n\n"
+        "Qui trovi tutti i prodotti attualmente disponibili nel nostro shop:\n\n"
+    )
+
+    for categoria, info in categorie.items():
+        testo += (
+            f"🔹 *{categoria}* — 💶 *{info['prezzo']}€*\n"
+        )
+        for nome, quantita in info["prodotti"]:
+            stato = "✅ Disponibile" if quantita > 0 else "❌ Esaurito"
+            testo += f"   • {nome} ({quantita}) — {stato}\n"
+        testo += "\n"
+
+    testo += (
+        "🛒 *Come ordinare?*\n"
+        "Seleziona *Ordina* dal menu e scegli il prodotto che preferisci.\n\n"
+        "📦 Consegna rapida | 🔒 Pagamenti sicuri | 💬 Assistenza diretta"
+    )
+
+    await target.answer(testo, parse_mode="Markdown")
 
 @dp.message(CommandStart())
 async def start(message: Message):
