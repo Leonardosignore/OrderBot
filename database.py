@@ -143,15 +143,7 @@ def scala_quantita(prodotto, quantita):
     conn.close()
 
 def seed_prodotti():
-    prodotti = [
-        ("Space Marine Tactical Squad", 50, "45K", 25.0),
-        ("Ork Boyz", 100, "45K", 15.0),
-        ("Eldar Guardian Squad", 75, "45K", 20.0),
-        ("Tau Fire Warrior Team", 60, "45K", 22.0),
-        ("Necron Warrior Squad", 80, "45K", 18.0),
-        ("Imperial Guard Infantry Squad", 120, "45K", 12.0),
-        ("Chaos Space Marine Squad", 55, "45K", 27.0),
-    ]
+    prodotti = []
 
     conn = get_connection()
     cur = conn.cursor()
