@@ -144,10 +144,13 @@ def scala_quantita(prodotto, quantita):
 
 def seed_prodotti():
     prodotti = [
-        ("mele", 50, "40K", "15"),
-        ("banane", 30, "40K", "15"),
-        ("arance", 20, "60K", "20"),
-        ("pere", 15, "60K", "20")
+        ("Space Marine Tactical Squad", 50, "45K", 25.0),
+        ("Ork Boyz", 100, "45K", 15.0),
+        ("Eldar Guardian Squad", 75, "45K", 20.0),
+        ("Tau Fire Warrior Team", 60, "45K", 22.0),
+        ("Necron Warrior Squad", 80, "45K", 18.0),
+        ("Imperial Guard Infantry Squad", 120, "45K", 12.0),
+        ("Chaos Space Marine Squad", 55, "45K", 27.0),
     ]
 
     conn = get_connection()
@@ -155,7 +158,7 @@ def seed_prodotti():
 
     for nome, quantita, categoria, prezzo in prodotti:
         cur.execute(
-            "INSERT OR IGNORE INTO prodotti (nome, quantita, categoria, prezzo) VALUES (?, ?, ?, ?)",
+            "INSERT INTO prodotti (nome, quantita, categoria, prezzo) VALUES (?, ?, ?, ?)",
             (nome, quantita, categoria, prezzo)
         )
 

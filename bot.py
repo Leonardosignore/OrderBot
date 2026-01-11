@@ -14,7 +14,7 @@ from database import annulla_ordine
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 import logging
-
+from aiogram.types import FSInputFile
 
 load_dotenv()
 
@@ -24,7 +24,7 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 VENDITORE_ID = int(os.getenv("VENDITORE_ID"))
 
 ORDINI_IN_CORSO = {}
-CATEGORIE = ["40K", "60K"]
+START_IMAGE_PATH = "start_image.jpeg"
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
@@ -55,6 +55,7 @@ async def start(message: Message):
             "/annulla ID_ORDINE → annulla un ordine\n\n"
             "Usa questi comandi per gestire le vendite."
         )
+        return
         
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [
@@ -64,12 +65,20 @@ async def start(message: Message):
             InlineKeyboardButton(text="🛒 Effettua un ordine", callback_data="ordina")
         ]
     ])
-    await message.answer(
-        "👋 Benvenuto!\n\n"
-        "Con questo bot puoi consultare i prodotti disponibili e fare un ordine.\n\n"
-        "Usa i pulsanti qui sotto per iniziare 👇",
+    photo = FSInputFile(START_IMAGE_PATH)
+    await message.answer_photo(
+        photo=photo,
+        caption=(
+            "Benvenuto nel mondo BotPuff! 👋💨\n\n"
+            "Il tuo shop h24 attivo. Consulta il magazzino in tempo reale e ordina ciò che desideri in totale autonomia:\n\n"
+            "🛒 *Esplora*: Sfoglia il catalogo sempre aggiornato con le disponibilità in tempo reale.\n"
+            "✨ *Ordina*: Scegli quello che ami e conferma l'ordine in un istante.\n"
+            "🚛 *Consegna*: Una volta inviato l'ordine, ti contatterò personalmente per definire insieme i dettagli di pagamento e consegna.\n\n"
+            "Pronto a iniziare? Clicca sul pulsante qui sotto per scoprire le novità di oggi!"
+        ),
+        parse_mode="Markdown",                     
         reply_markup=keyboard
-        )
+    )
 
 @dp.message(Command("prodotti"))
 async def lista_prodotti(message: Message):
