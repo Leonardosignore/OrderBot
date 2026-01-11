@@ -169,9 +169,6 @@ async def get_all_prodotti_(callback: CallbackQuery):
 async def lista_ordini_callback(callback: CallbackQuery):
     logger.info("Handler /ordini callback ")
     await callback.answer()
-    if callback.from_user.id != VENDITORE_ID:
-        logger.info("non sono il venditore", callback.from_user.id, VENDITORE_ID)
-        return
 
     ordini = get_ordini(callback.from_user.id)
 
