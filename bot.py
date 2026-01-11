@@ -55,7 +55,7 @@ async def start(message: Message):
             "/annulla ID_ORDINE → annulla un ordine\n\n"
             "Usa questi comandi per gestire le vendite."
         )
-        return
+        
         
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [
