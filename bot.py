@@ -170,7 +170,7 @@ async def lista_ordini_callback(callback: CallbackQuery):
     logger.info("Handler /ordini callback ")
     await callback.answer()
 
-    logger.info("Handler /ordini userID {callback.from_user.id}")
+    logger.info(f"{callback.from_user.id}")
     ordini = get_ordini(callback.message.from_user.id)
 
     if not ordini:
@@ -191,8 +191,8 @@ async def lista_ordini_callback(callback: CallbackQuery):
 @dp.message(Command("storico"))
 async def storico_ordini(message: Message):
     logger.info("Handler /storico ")
-    if message.from_user.id == VENDITORE_ID:
-        logger.info("non sono un cliente", message.from_user.id, VENDITORE_ID)
+    if message.from_user.id != VENDITORE_ID:
+        logger.info("sono un cliente", message.from_user.id, VENDITORE_ID)
         return
     ordini = get_ordini()
 
@@ -401,12 +401,13 @@ async def ricevi_quantita(message: Message):
     del ORDINI_IN_CORSO[user_id]
 
     await message.answer(
-        f"📝 Congratulazioni Ordine Registrato!\n\n"
+        f"📝 Congratulazioni ordine registrato!\n\n"
         f"ID: {ordine_id}\n"
         f"Prodotto: {nome_prodotto}\n"
         f"Quantità: {quantita}"
-        "Attendi di essere contattato per i dettagli di pagamento e consegna.\n\n"
     )
+
+    await message.answer("📬 Ti contatterò presto per i dettagli di pagamento e consegna. Grazie per l'ordine!")
 
     await bot.send_message(
         VENDITORE_ID,
