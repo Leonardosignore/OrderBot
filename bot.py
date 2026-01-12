@@ -171,7 +171,7 @@ async def lista_ordini_callback(callback: CallbackQuery):
     await callback.answer()
 
     logger.info(f"{callback.from_user.id}")
-    ordini = get_ordini(callback.message.from_user.id)
+    ordini = get_ordini(callback.from_user.id)
 
     if not ordini:
         await callback.message.answer("📭 Nessun ordine in attesa.")
