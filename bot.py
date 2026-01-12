@@ -154,9 +154,9 @@ async def scegli_categoria(callback: CallbackQuery):
         ]
     )
 
-    action = "ordinare" if callback.data == "ordina" else "consultare"
     await callback.message.answer(
-        f"Seleziona la categoria di prodotti da\nLe *categorie* indicano la quantità di *tiri* delle puff. {action}:",
+        f"Seleziona la categoria di prodotti da\n\nLe *categorie* indicano la quantità di *tiri* delle puff",
+         parse_mode="Markdown",
         reply_markup=keyboard
     )
 
@@ -359,6 +359,7 @@ async def ricevi_quantita(message: Message):
     user_id = message.from_user.id
 
     if user_id not in ORDINI_IN_CORSO:
+        await message.answer("❌ Non hai ordini in corso. Usa /start per iniziare.\n\n")
         return
 
     stato = ORDINI_IN_CORSO[user_id]
