@@ -170,6 +170,7 @@ async def lista_ordini_callback(callback: CallbackQuery):
     logger.info("Handler /ordini callback ")
     await callback.answer()
 
+    logger.info("Handler /ordini userID {callback.from_user.id}")
     ordini = get_ordini(callback.message.from_user.id)
 
     if not ordini:
@@ -177,11 +178,12 @@ async def lista_ordini_callback(callback: CallbackQuery):
         return
 
     testo = "📋 Ordini Effettuati:\n\n"
-    for oid, user_id, nome_cliente, prodotto, quantita, stato in ordini:
+    for oid, user_id, nome_cliente, prodotto, quantita, stato, timestamp in ordini:
         testo += (
             f"Prodotto: {prodotto}\n"
             f"Quantità: {quantita}\n"
             f"Stato: {stato}\n\n"
+            f"Data: {timestamp}\n\n"
         )
 
     await callback.message.answer(testo)
@@ -201,7 +203,6 @@ async def storico_ordini(message: Message):
     testo = "📋 Storico ordini:\n\n"
     for oid, user_id, nome_cliente, prodotto, quantita, stato, timestamp in ordini:
         testo += (
-            f"ID: {oid}\n"
             f"Prodotto: {prodotto}\n"
             f"Quantità: {quantita}\n"
             f"Stato: {stato}\n"
@@ -400,10 +401,11 @@ async def ricevi_quantita(message: Message):
     del ORDINI_IN_CORSO[user_id]
 
     await message.answer(
-        f"📝 Ordine registrato!\n\n"
+        f"📝 Congratulazioni Ordine Registrato!\n\n"
         f"ID: {ordine_id}\n"
         f"Prodotto: {nome_prodotto}\n"
         f"Quantità: {quantita}"
+        "Attendi di essere contattato per i dettagli di pagamento e consegna.\n\n"
     )
 
     await bot.send_message(
