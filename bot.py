@@ -404,11 +404,12 @@ async def ricevi_quantita(message: Message):
 
     # nome cliente
     user = message.from_user
-    nome_cliente = (
-        f"@{user.username}"
-        if user.username
-        else f"{user.first_name} {user.last_name or ''}".strip()
-    )
+    if user.username:
+        nome_cliente = f"@{user.username}"
+    else:
+        nome_completo = f"{user.first_name} {user.last_name or ''}".strip()
+        # Quando invii il messaggio al venditore con parse_mode="Markdown"
+        nome_cliente = f"[{nome_completo}](tg://user?id={user.id})"
 
     ordine_id = crea_ordine(
         user_id,
