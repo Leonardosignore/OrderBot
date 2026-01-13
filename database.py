@@ -172,14 +172,21 @@ def scala_quantita(prodotto, quantita):
     conn.close()
 
 def seed_prodotti():
-    prodotti = []
+    prodotti = [
+        ("Strawberry and Watermelon Ice & Kiwi Passion Fruit Guava", 10, "45000 TIRI", 15),
+        ("Strawberry and Watermelon & Grape Ice", 10, "45000 TIRI", 15),
+        ("Blueberry Raspberry & Peach Mango Watermelon", 10, "45000 TIRI", 15),
+        ("Watermelon Ice & Strawberry and Mango", 10, "45000 TIRI", 15),
+        ("Blueberry Ice & Black Dragon Ice", 10, "45000 TIRI", 15),
+        ("Blueberry Watermelon & Strawberry Mango", 10, "45000 TIRI", 15)
+    ]
 
     conn = get_connection()
     cur = conn.cursor()
 
     for nome, quantita, categoria, prezzo in prodotti:
         cur.execute(
-            "INSERT INTO prodotti (nome, quantita, categoria, prezzo) VALUES (?, ?, ?, ?)",
+            "INSERT OR IGNORE INTO prodotti (nome, quantita, categoria, prezzo) VALUES (?, ?, ?, ?)",
             (nome, quantita, categoria, prezzo)
         )
 
