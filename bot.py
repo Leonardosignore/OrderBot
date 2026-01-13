@@ -231,14 +231,14 @@ async def mostra_prodotti_categoria(callback: CallbackQuery):
 
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text=f"{nome} ({quantita}) {prezzo}", callback_data=f"ordina_prodotto:{nome}")]
+            [InlineKeyboardButton(text=f"{nome} ({quantita}pz)", callback_data=f"ordina_prodotto:{nome}")]
             for nome, quantita, _, prezzo in prodotti
         ]
     )
 
     await callback.message.answer(
         f"💨 *Puff {categoria}* — 💶 *{prezzo_categoria}€*\n\n"
-        "Seleziona il gusto disponibile:",
+        "Seleziona il gusto:",
         parse_mode="Markdown",
         reply_markup=keyboard
     )
