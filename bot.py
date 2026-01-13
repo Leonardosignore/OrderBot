@@ -361,6 +361,8 @@ async def get_id(message: Message):
 async def ricevi_quantita(message: Message):
     user_id = message.from_user.id
 
+    logger.info("Handler ricevi_quantita chiamato")
+
     if user_id not in ORDINI_IN_CORSO:
         await message.answer("❌ Non hai ordini in corso. Usa /start per iniziare.\n\n")
         return
