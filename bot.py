@@ -411,6 +411,7 @@ async def ricevi_quantita(message: Message):
         f"ID: {ordine_id}\n"
         f"Prodotto: {nome_prodotto}\n"
         f"Quantità: {quantita}"
+        f"Totale: {quantita * 15}€"
     )
 
     await message.answer("📬 Ti contatterò presto per i dettagli di pagamento e consegna. Grazie per l'ordine!")
