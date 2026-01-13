@@ -47,6 +47,16 @@ def get_users ():
     conn.close()
     return result
 
+def get_prodotti_by_id(id):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "SELECT nome, quantita, categoria, prezzo FROM prodotti WHERE id = ?",
+        (id,)
+        )
+    result = cur.fetchall()
+    conn.close()
+    return result
 
 def get_prodotti(categoria=None):
     conn = get_connection()

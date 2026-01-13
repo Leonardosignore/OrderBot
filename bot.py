@@ -2,7 +2,7 @@ import asyncio
 import os
 from aiogram.types import CallbackQuery
 from dotenv import load_dotenv
-from database import get_categorie, get_ordini, get_users, init_db, seed_prodotti, get_prodotti
+from database import get_categorie, get_ordini, get_prodotti_by_id, get_users, init_db, seed_prodotti, get_prodotti
 from aiogram import Bot, Dispatcher
 from aiogram.types import Message
 from aiogram.filters import CommandStart
@@ -230,11 +230,16 @@ async def mostra_prodotti_categoria(callback: CallbackQuery):
         return
 
     keyboard = InlineKeyboardMarkup(
-        inline_keyboard=[
-            [InlineKeyboardButton(text=f"{nome} ({quantita}pz)", callback_data=f"ordina_prodotto:{nome}")]
-            for nome, quantita, _, prezzo in prodotti
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(
+                text=f"{nome} ({quantita}pz)",  # il nome rimane visibile all'utente
+                callback_data=f"ordina_prodotto:{prod_id}"  # qui usi l'ID
+            )
         ]
-    )
+        for prod_id, nome, quantita, prezzo in prodotti  # prodotti ora deve includere anche l'id
+    ]
+)
 
     await callback.message.answer(
         f"💨 *Puff {categoria}* — 💶 *{prezzo_categoria}€*\n\n"
@@ -245,10 +250,18 @@ async def mostra_prodotti_categoria(callback: CallbackQuery):
 
 @dp.callback_query(lambda c: c.data.startswith("ordina_prodotto:"))
 async def scegli_prodotto(callback: CallbackQuery):
-    logger.info("Handler /ordina_prodotto: ")
     await callback.answer()
 
-    nome_prodotto = callback.data.split(":")[1]
+    # estrai l'ID del prodotto
+    prod_id = int(callback.data.split(":")[1])
+
+    # recupera il nome reale dal database
+    prodotto = get_prodotti_by_id(prod_id)
+    if not prodotto:
+        await callback.message.answer("❌ Prodotto non trovato.")
+        return
+
+    nome_prodotto, quantita_disponibile, prezzo, categoria = prodotto
 
     ORDINI_IN_CORSO[callback.from_user.id].update({
         "prodotto": nome_prodotto,
