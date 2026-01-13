@@ -173,12 +173,12 @@ def scala_quantita(prodotto, quantita):
 
 def seed_prodotti():
     prodotti = [
-        ("Strawberry and Watermelon Ice & Kiwi Passion Fruit Guava", 10, "45000 TIRI", 15),
-        ("Strawberry and Watermelon & Grape Ice", 10, "45000 TIRI", 15),
-        ("Blueberry Raspberry & Peach Mango Watermelon", 10, "45000 TIRI", 15),
-        ("Watermelon Ice & Strawberry and Mango", 10, "45000 TIRI", 15),
-        ("Blueberry Ice & Black Dragon Ice", 10, "45000 TIRI", 15),
-        ("Blueberry Watermelon & Strawberry Mango", 10, "45000 TIRI", 15)
+        ("Strawberry and Watermelon Ice & Kiwi Passion Fruit Guava", 10, "45k", 15),
+        ("Strawberry and Watermelon & Grape Ice", 10, "45k", 15),
+        ("Blueberry Raspberry & Peach Mango Watermelon", 10, "45k", 15),
+        ("Watermelon Ice & Strawberry and Mango", 10, "45k", 15),
+        ("Blueberry Ice & Black Dragon Ice", 10, "45k", 15),
+        ("Blueberry Watermelon & Strawberry Mango", 10, "45k", 15)
     ]
 
     conn = get_connection()
