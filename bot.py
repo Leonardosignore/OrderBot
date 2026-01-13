@@ -397,7 +397,7 @@ async def ricevi_quantita(message: Message):
     nome_prodotto = stato["prodotto"]
 
     categoria = stato["categoria"]
-    products = {nome: quantita for nome, quantita, *_ in get_prodotti(categoria)}
+    products = {nome: quantita for id, nome, quantita, *_ in get_prodotti(categoria)}
     if quantita > products.get(nome_prodotto, 0):
         await message.answer("❌ Quantità non disponibile.")
         return
