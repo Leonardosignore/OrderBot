@@ -51,10 +51,10 @@ def get_prodotti_by_id(id):
     conn = get_connection()
     cur = conn.cursor()
     cur.execute(
-        "SELECT nome, quantita, categoria, prezzo FROM prodotti WHERE id = ?",
+        "SELECT nome, quantita, prezzo, categoria FROM prodotti WHERE id = ?",
         (id,)
-        )
-    result = cur.fetchall()
+    )
+    result = cur.fetchone()
     conn.close()
     return result
 
@@ -66,7 +66,7 @@ def get_prodotti(categoria=None):
         cur.execute("SELECT nome, quantita, categoria, prezzo FROM prodotti ORDER BY categoria, nome")
     else:
         cur.execute(
-            "SELECT nome, quantita, categoria, prezzo FROM prodotti WHERE categoria = ? AND quantita > 0 ORDER BY nome",
+            "SELECT id, nome, quantita, categoria, prezzo FROM prodotti WHERE categoria = ? AND quantita > 0 ORDER BY nome",
             (categoria,)
         )
 
