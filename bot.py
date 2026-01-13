@@ -423,7 +423,7 @@ async def ricevi_quantita(message: Message):
         f"📝 Congratulazioni ordine registrato!\n\n"
         f"ID: {ordine_id}\n"
         f"Prodotto: {nome_prodotto}\n"
-        f"Quantità: {quantita}"
+        f"Quantità: {quantita}\n"
         f"Totale: {quantita * 15}€"
     )
 
@@ -441,7 +441,7 @@ async def ricevi_quantita(message: Message):
 
 async def main():
     init_db()
-    seed_prodotti()
+    #seed_prodotti()
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
