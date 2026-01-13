@@ -149,13 +149,13 @@ async def scegli_categoria(callback: CallbackQuery):
 
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text=cat, callback_data=f"categoria:{cat}")]
-            for cat in CATEGORIE
+            [InlineKeyboardButton(text=cat, callback_data=f"categoria {cat}: {prezzo}€")]
+            for cat, prezzo in CATEGORIE
         ]
     )
 
     await callback.message.answer(
-        f"Seleziona la categoria di puff:\n*(le categorie ndicano la quantità di tiri delle puff)*",
+        f"Seleziona la categoria di puff:\n",
          parse_mode="Markdown",
         reply_markup=keyboard
     )
@@ -223,6 +223,7 @@ async def mostra_prodotti_categoria(callback: CallbackQuery):
     }
 
     prodotti = get_prodotti(categoria)  # assume get_prodotti accetta categoria come argomento
+    prezzo_categoria = prodotti[0][3] if prodotti else None
 
     if not prodotti:
         await callback.message.answer("❌ Nessun prodotto disponibile in questa categoria.")
@@ -230,13 +231,15 @@ async def mostra_prodotti_categoria(callback: CallbackQuery):
 
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text=f"{nome} ({quantita}) 💶 {prezzo} €", callback_data=f"ordina_prodotto:{nome}")]
+            [InlineKeyboardButton(text=f"{nome} ({quantita}) {prezzo}", callback_data=f"ordina_prodotto:{nome}")]
             for nome, quantita, _, prezzo in prodotti
         ]
     )
 
     await callback.message.answer(
-        f"Prodotti disponibili nella categoria {categoria}:",
+        f"💨 *Puff {categoria}* — 💶 *{prezzo_categoria}€*\n\n"
+        "Seleziona il gusto disponibile:",
+        parse_mode="Markdown",
         reply_markup=keyboard
     )
 
