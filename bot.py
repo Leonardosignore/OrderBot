@@ -410,6 +410,12 @@ async def ricevi_quantita(message: Message):
         nome_completo = f"{user.first_name} {user.last_name or ''}".strip()
         # Quando invii il messaggio al venditore con parse_mode="Markdown"
         nome_cliente = f"[{nome_completo}](tg://user?id={user.id})"
+        await message.answer(
+            "ℹ️ Nota: Non hai uno username Telegram, non puoi essere contattato dal venditore.\n"
+            "⚠️Invia un ordine SOLO dopo aver impostato lo username.⚠️\n"
+            "⚠️Altrimenti non sarai contattato⚠️\n"
+            "Puoi farlo andando su Impostazioni > Modifica profilo > Username.\n"
+        )
 
     ordine_id = crea_ordine(
         user_id,
