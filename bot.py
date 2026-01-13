@@ -237,7 +237,7 @@ async def mostra_prodotti_categoria(callback: CallbackQuery):
                 callback_data=f"ordina_prodotto:{prod_id}"  # qui usi l'ID
             )
         ]
-        for prod_id, nome, quantita, prezzo in prodotti  # prodotti ora deve includere anche l'id
+        for prod_id, nome, quantita, _, prezzo in prodotti  # prodotti ora deve includere anche l'id
     ]
 )
 
