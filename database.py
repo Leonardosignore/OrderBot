@@ -68,8 +68,8 @@ def get_categorie ():
     conn = get_connection()
     cur = conn.cursor()
     
-    cur.execute("SELECT DISTINCT categoria, prezzo FROM prodotti")
-    result = [row for row in cur.fetchall()]
+    cur.execute("SELECT DISTINCT categoria FROM prodotti")
+    result = [row[0] for row in cur.fetchall()]
 
     conn.close()
     return result

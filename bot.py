@@ -150,7 +150,7 @@ async def scegli_categoria(callback: CallbackQuery):
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
             [InlineKeyboardButton(text=cat, callback_data=f"categoria {cat}: {prezzo}€")]
-            for cat, prezzo in CATEGORIE
+            for cat in CATEGORIE
         ]
     )
 
