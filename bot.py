@@ -422,6 +422,7 @@ async def ricevi_quantita(message: Message):
         f"Cliente: {nome_cliente}\n"
         f"Prodotto: {nome_prodotto}\n"
         f"Quantità: {quantita}"
+        f"Totale: {quantita * 15}€"
     )
 
 async def main():
