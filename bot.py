@@ -155,7 +155,7 @@ async def scegli_categoria(callback: CallbackQuery):
     )
 
     await callback.message.answer(
-        f"Seleziona la categoria di prodotti da\n\nLe *categorie* indicano la quantità di *tiri* delle puff",
+        f"Seleziona la categoria di puff:\n*(le categorie ndicano la quantità di tiri delle puff)*",
          parse_mode="Markdown",
         reply_markup=keyboard
     )
@@ -230,8 +230,8 @@ async def mostra_prodotti_categoria(callback: CallbackQuery):
 
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
-            [InlineKeyboardButton(text=f"{nome} ({quantita})", callback_data=f"ordina_prodotto:{nome}")]
-            for nome, quantita, *_ in prodotti
+            [InlineKeyboardButton(text=f"{nome} ({quantita}) 💶 {prezzo} €", callback_data=f"ordina_prodotto:{nome}")]
+            for nome, quantita, _, prezzo in prodotti
         ]
     )
 
