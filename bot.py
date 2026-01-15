@@ -104,6 +104,7 @@ async def start(message: Message):
             "🛒 *Esplora*: Sfoglia il catalogo sempre aggiornato con le disponibilità in tempo reale.\n"
             "✨ *Ordina*: Scegli quello che ami e conferma l'ordine in un istante.\n"
             "🚛 *Consegna*: Una volta inviato l'ordine, ti contatterò personalmente per definire insieme i dettagli di pagamento e consegna.\n\n"
+            "⚠️*Per essere contattato dopo l'ordine, assicurati di avere uno Username e non cambiarlo subito dopo aver effettuato l'ordine.*⚠️\n\n"
             "Pronto a iniziare? Clicca sul pulsante qui sotto per scoprire le novità di oggi!"
         ),
         parse_mode="Markdown",                     
